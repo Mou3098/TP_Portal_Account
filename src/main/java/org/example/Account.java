@@ -7,14 +7,19 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.testng.annotations.Test;
 
+
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Properties;
+//import org.example.pageofall.
 
 public class Account {
     public WebDriver driver;
     Properties properties = new Properties();
+
+
     public Account()
     {
         driver = new ChromeDriver();
@@ -26,6 +31,8 @@ public class Account {
         }
     }
 
+
+
     @Test(priority = 0)
     public void portal_login_display_load() throws InterruptedException {
         String tp_url = properties.getProperty("Tp_portal_url");
@@ -35,15 +42,16 @@ public class Account {
 
     @Test(priority = 1)
     public void portal_login_input() throws InterruptedException {
-        WebElement usr_name = driver.findElement(By.xpath("//*[@id=\"app\"]/div[4]/div/section[2]/div[2]/form[1]/div/div[1]/input"));
+        Tp_portal_login_locator tp = new Tp_portal_login_locator(driver);
+        WebElement usr_name = tp.portal_login_usrname_locator();
         String username = properties.getProperty("Username");
         usr_name.sendKeys(username);
 
-        WebElement password = driver.findElement(By.xpath("//*[@id=\"app\"]/div[4]/div/section[2]/div[2]/form[1]/div/div[2]/input"));
+        WebElement password = tp.portal_login_password_locator();
         String paswrd = properties.getProperty("password");
         password.sendKeys(paswrd);
 
-        WebElement login = driver.findElement(By.xpath("//*[@id=\"app\"]/div[4]/div/section[2]/div[2]/form[1]/div/div[3]/button"));
+        WebElement login = tp.portal_login_button();
         login.click();
         Thread.sleep(2000);
 
@@ -51,12 +59,13 @@ public class Account {
 
     @Test(priority = 2)
     public void portal_otp_input() throws InterruptedException {
-        WebElement otp = driver.findElement(By.xpath("//*[@id=\"app\"]/div[4]/div/section[2]/div[2]/form[1]/div/div[1]/div/input"));
+        TP_portal tp = new TP_portal(driver);
+        WebElement otp = tp.otp_input_locator();
         String OTP = properties.getProperty("OTP");
         otp.sendKeys(OTP);
 
 
-        WebElement btn = driver.findElement(By.xpath("//*[@id=\"app\"]/div[4]/div/section[2]/div[2]/form[1]/div/div[2]/button"));
+        WebElement btn = tp.otp_btn_locator();
         btn.click();
         Thread.sleep(2000);
 
@@ -64,7 +73,8 @@ public class Account {
 
     @Test(priority = 3)
     public void go_accounts() throws InterruptedException {
-        WebElement btn = driver.findElement(By.xpath("//*[@id=\"app\"]/div[4]/div/aside/ul/li[3]/a/span"));
+        TP_portal tp = new TP_portal(driver);
+        WebElement btn =tp.account_tab_open();
         btn.click();
         Thread.sleep(2000);
     }
@@ -112,8 +122,6 @@ public class Account {
 
         // Switch back to the original tab/window if needed
         driver.switchTo().window(tabs.get(0));
-
-
         WebElement btn2 = driver.findElement(By.xpath("//*[@id=\"wallet-xxx\"]/div/div/table/tbody/tr/td[7]/a[2]"));
 
         // Perform the action to open the link in a new tab (simulating CTRL + click)
@@ -126,12 +134,21 @@ public class Account {
         Thread.sleep(2000);
 
         // Switch to the new tab
-        driver.switchTo().window(tabs.get(2));
+        ArrayList<String> tab = new ArrayList<String>(driver.getWindowHandles());
+        driver.switchTo().window(tab.get(2));  // 0-for main tab, 1 -for details tab, 2- for txn info tab
 
         // You can now perform actions in the new tab/window
 
         // Optionally, you can close the new tab/window when you're done with it
         // driver.close();
+    }
+
+    @Test(priority = 7)
+    public void Refresh_btn_current_blnc() throws InterruptedException {
+        WebElement btn = driver.findElement(By.xpath("//*[@id=\"app\"]/div[4]/main/div[2]/div[2]/div/div[1]/div/div/div/div/div[1]/div/div[2]/h3/button"));
+        btn.click();
+        Thread.sleep(2000);
+
     }
 
 
