@@ -3,6 +3,8 @@ package org.example;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.io.FileInputStream;
@@ -15,6 +17,7 @@ public class Tp_portal_login_test {
     Properties properties = new Properties();
 
 
+
     public Tp_portal_login_test()
     {
         driver = new ChromeDriver();
@@ -25,7 +28,6 @@ public class Tp_portal_login_test {
             return;
         }
     }
-
 
 
     @Test(priority = 0)
@@ -62,8 +64,22 @@ public class Tp_portal_login_test {
 
         WebElement btn = tp.otp_btn_locator();
         btn.click();
-        Thread.sleep(2000);
+        //Accounts_tab_test tp1 = new Accounts_tab_test(driver);
+        Thread.sleep(4000);
 
+    }
+
+    /*@AfterMethod()
+    public void tearDown() {
+        // Close WebDriver
+        if (driver != null) {
+            driver.quit();
+        }
+    }*/
+
+    @AfterMethod
+    public WebDriver getDriver() {
+        return driver;
     }
 
 }
